@@ -1,5 +1,6 @@
 import pymysql
 import pandas as pd
+from multiprocessing import Manager
 
 class DBsysyem(object):
 
@@ -36,3 +37,6 @@ class DBsysyem(object):
         result = cursor.fetchall()
         result = pd.DataFrame(result)
         return result
+
+    # @Manager
+    # def multi_run(self):
