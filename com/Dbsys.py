@@ -46,13 +46,12 @@ class DBsysyem(object):
         for q_set in args:
 
             cols = self.isintable(q_set[0], q_set[1])
-            print(cols)
+            #print(cols)
             query_header = query_col = query_join = query_where = str()
 
             if purpose == 'items':
                 query_header = f'select distinct mic.stay_id, ih.hr, '
                 query_col = [f'{q_set[0]}.{c}' for c in q_set[1]]
-                #query_col = [f'{q_set[0]}.{c}' for c in cols[4:]]
                 query_join = f'''
                         from {q_set[0]}
                         left join mimiciv.icustays mic on {q_set[0]}.hadm_id =  mic.hadm_id
@@ -64,7 +63,7 @@ class DBsysyem(object):
                 query_list.append(query)
 
             elif purpose == 'frame':
-                query_header = f'select {q_set[0]}.stay_id, {q_set[0]}.hr, '
+                query_header = f'select distinct {q_set[0]}.stay_id, {q_set[0]}.hr, '
                 query_col = f'mic.first_careunit '
                 query_join = f'from {q_set[0]} left join mimiciv.icustays mic on mic.stay_id = {q_set[0]}.stay_id '
                 query_where = f'where {q_set[0]}.hr between {hr[0]} and {hr[1]} '
