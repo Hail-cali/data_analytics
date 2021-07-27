@@ -107,5 +107,10 @@ class DBsysyem(object):
 
 class DBsystem(DBsysyem):
 
-    def fit(self):
+    def __init__(self):
+        super().__init__()
+        self.x = None
+
+    def convert(self, X):
+
         pass
