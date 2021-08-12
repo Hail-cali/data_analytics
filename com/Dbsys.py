@@ -71,6 +71,19 @@ class DBsysyem(object):
                 query = query_header + query_col + query_join + query_where
                 query_list.append(query)
 
+            elif purpose =='medication':
+                query_header = f'select distinct mic.stay_id, ih.hr, '
+                query_col = [f'{q_set[0]}.{c}' for c in q_set[1]]
+                query_join = f'''
+                                        from {q_set[0]}
+                                        left join mimiciv.icustays mic on {q_set[0]}.hadm_id =  mic.hadm_id
+                                        inner join icustay_hourly_co ih on mic.stay_id = ih.stay_id
+                                        '''
+                query_where = f'where ih.hr between {hr[0]} and {hr[1]} and {q_set[0]}.charttime between ih.starttime and ih.endtime'
+
+                query = query_header + ', '.join(query_col) + query_join + query_where
+                query_list.append(query)
+
         return query_list
 
     def isintable(self, table, cols):
@@ -107,10 +120,11 @@ class DBsysyem(object):
 
 class DBsystem(DBsysyem):
 
-    def __init__(self):
-        super().__init__()
-        self.x = None
 
     def convert(self, X):
+
+        pass
+
+    def preprocessing(self):
 
         pass
