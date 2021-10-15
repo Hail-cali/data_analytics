@@ -40,7 +40,7 @@ class DBsysyem(object):
         result = pd.DataFrame(result)
         return result
 
-    def make_query(self, *args, purpose='items', how='left', on='', hr=(0,48)):
+    def make_query(self, *args, purpose='items', how='left', on='', hr=(0, 48)):
         query_list = []
 
         for q_set in args:
@@ -104,7 +104,7 @@ class DBsysyem(object):
         '''
         return True
 
-    def match_table_col(self, table, columns=[]):
+    def match_table_col(self, table, columns=[ ]):
 
         return (table, columns)
 
@@ -113,10 +113,12 @@ class DBsysyem(object):
 
     def check_connection(self):
 
-        if isinstance(self.run('show tables'),object):
+        if isinstance(self.run('show tables'), object):
             print(f'\nconnected\n')
         else:
             print(self.ERR_MSG['con_err'])
+
+
 
 class DBsystem(DBsysyem):
 
@@ -128,3 +130,17 @@ class DBsystem(DBsysyem):
     def preprocessing(self):
 
         pass
+
+
+    def _check_dataset_table(self, table):
+
+        if isinstance(table,list):
+            pass
+
+
+    def load_dataset(self, name='icu', table=['demo','vital','lab']):
+        if name == 'icu':
+            icu_lab = pd.read_pickle('../dataset/icu_data/icu_lab.pkl')
+            icu_vital = pd.read_pickle('../dataset/icu_data/icu_vital.pkl')
+            icu_demo = pd.read_pickle('../dataset/icu_data/icu_admit.pkl')
+            return icu_demo, icu_vital, icu_demo
