@@ -3,30 +3,52 @@
 class BaseKey:
     '''
     this is for base key structure
-
     '''
 
-    def __init__(self, db='mimiciv'):
+    def __init__(self, preset_db=None):
 
-        self.login_db = db
-        self.login = {"host": '',
+        self._login_db = preset_db
+        self._login = {"host": '',
                       'port': 8800,
                       "user": '',
                       "password": '',
                       'charset': 'utf8'}
 
-        self.err_msg = {"con_err": "Connect err, check db connection",
-                        "get_data_err": "check command ",
-                        "insert_err": "insert command err"}
+        self.preset_login()
 
-        self.set_login()
+    @property
+    def login(self, **kwargs):
 
-    def set_login(self):
-        if self.login_db == 'mimiciv':
-           meta = {"host": '000.00.00.000', 'port': 8800, "user": 'sample', "password": 'sample', 'charset': 'utf8'}
+        self._login.update(kwargs)
 
-        else:
-            meta = dict()
-            print('check meta table')
+    @property
+    def login_db(self, new):
+        self._login_db = new
+
+    @login.getter
+    def login(self):
+        return self._login
+
+    @login_db.getter
+    def login_db(self):
+        return self._login_db
+
+    def preset_login(self):
+        '''
+        :set: set database info in login like self.login.update({host:00})
+        need  to override base class, fill preset_login method
+        :return: None
+        '''
+        pass
+
+class SampleKey(BaseKey):
+
+    '''
+    this class is sample key classs for set login info
+    '''
+    def preset_login(self):
+        if self.login_db == 'sample':
+            meta = {"host": '192.168.1.1', 'port': 8000, "user": 'user', "password": 'passwd',
+                    'charset': 'utf8'}
 
         self.login.update(meta)
