@@ -50,14 +50,32 @@ class Sql(BaseBuilder):
         self._col = f''
         self._from = f' FROM'
         self._where = f' WHERE'
+        self._cmd = f' '
+
+    @property
+    def cmd(self):
+        return self._cmd
 
     @property
     def columns(self):
         return self._col
 
-    @property
+    @cmd.setter
+    def cmd(self, input_cmd):
+        self._cmd = f'{input_cmd.upper()}'
+
+
+    @columns.setter
     def columns(self, *args):
-        self._col += args[0]
+        self._col = f''
+
+        if isinstance(args[0], str):
+            self._col += f' {args[0]}'
+
+        else:
+            for d in args[0]:
+                print(d)
+                self._col += f' {d}'
 
     @property
     def FROM(self):
@@ -87,15 +105,28 @@ class Sql(BaseBuilder):
 
     def make(self):
 
-        self.query = self.FROM, self.where
+        self.query = self.cmd, self.columns, self.FROM, self.where
 
         self._end()
         return self.flush()
+
+    def flush(self):
+        print(f'flushed ')
+
+        result = f''
+        for _ in range(len(self.query)):
+            result += self.query.pop(0)
+
+        self._from = ' FROM'
+
+        return result
 
 
 if __name__ == '__main__':
 
     sql = Sql()
+    sql.cmd = 'select'
+    sql.columns = '*'
     sql.where = 'hire', 'here'
     sql.FROM = 'table'
 
