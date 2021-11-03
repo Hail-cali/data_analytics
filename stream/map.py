@@ -9,13 +9,18 @@ TIMEOUT = 3000
 
 class BaseSession:
 
+    def __init__(self, base=requests, url=None, *args):
+        self.url = url
+        self.request = base
+
     async def __aenter__(self, *args):
-        print('enter ')
-        return self
+        # print('enter ')
+
+        return self.request.get(self.url)
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        print('end reader')
-        return self
+        # print('end reader')
+        pass
 
     def get(self, url):
         return requests.get(url)
@@ -51,10 +56,11 @@ class BaseStream:
         else:
             print(f'Check Reader Type: {type(self.reader)}')
 
-        print(f'reserved : {len(self._schedule)} work is scheduled')
+        print(f'reserved : {len(self._schedule)} ', end=' ')
 
 
     def executor(self):
+        print('>> execute')
         return self._schedule
 
 
@@ -71,78 +77,55 @@ class BaseStream:
 
 class BaseReader:
 
-    def __init__(self, url=None, session=requests, timeout=TIMEOUT):
+    def __init__(self, session=requests, timeout=TIMEOUT):
         self.session = session
-        self._url = url
+        self._urls = None
         self.timeout = timeout
 
     async def __aenter__(self, *args):
-        print('enter ')
-        return self
+
+
+        pass
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        print('end reader')
+
         return self
 
     @property
-    def url(self):
-        return self._url
+    def urls(self):
+        return self._urls
 
-    @url.setter
-    def url(self, query):
-        self._url = query
+    @urls.setter
+    def urls(self, query):
+        self._urls = query
 
 
     async def request(self, url=None):
 
         if url is not None:
-            self.url = url
+            self.urls = url
 
-        with self.session.get(self.url) as response:
 
-            text = response.text
+        if issubclass(self.session, BaseSession):
 
-            print(f'URL: {self.url}\nTEXT {text[30:60]}')
-            return text
+            async with self.session(requests, url) as response:
 
-        # async with self.session.get(self.url) as response:
-        #
-        #     text = response.text
-        #
-        #     print(f'URL: {self.url}\nTEXT {text[30:60]}')
-        #     return text
+                text = response.text
+
+                # print(f'URL: {self.url}\nTEXT {text[30:60]}')
+                return text
+
+        else:
+
+            with self.session.get(url) as response:
+
+                text = response.text
+
+                print(f'URL: {url}\nTEXT {text[30:60]}')
+                return text
 
 
 class BaseWriter:
 
     pass
 
-
-
-if __name__ == '__main__':
-    url = 'https://www.google.co.kr/search?q=apple'
-
-    link_list = ['https://www.google.co.kr/search?q=apple','https://www.google.co.kr/search?q=mango',
-                 'https://www.google.co.kr/search?q=banana','https://www.google.co.kr/search?q=apple'
-                 'https://www.google.co.kr/search?q=kiwi','https://www.google.co.kr/search?q=dev']
-
-    a_start = time.time()
-
-    stream = BaseStream(reader=BaseReader(url=url))
-    for l in link_list:
-        stream.scheduler(url=l)
-
-    asyncio.run(asyncio.wait(stream.executor()))
-    a_end = time.time()
-
-    print(f'asyncio {a_end-a_start:.5f}times')
-    b_start = time.time()
-
-    for l in link_list:
-        print(requests.get(l).text[100:150])
-    b_end = time.time()
-
-    print(f'python {b_end-b_start:.5f} times')
-
-    # requests.get(url)
-    print()
