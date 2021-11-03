@@ -30,6 +30,7 @@ def asyncio_scraper(urls=None, verbose=False, test=False):
     stream = BaseStream(reader=BaseReader(session=BaseSession))
 
     for l in urls:
+
         stream.scheduler(url=l)
 
     tasks = stream.executor()

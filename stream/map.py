@@ -50,6 +50,7 @@ class BaseStream:
 
 
     def scheduler(self, url=None):
+
         if self.check_status(self.reader):
             self._schedule.append(self.reader.request(url))
 

@@ -19,9 +19,10 @@ def main():
                  'wrong:link']
 
     link = ['https://www.google.co.kr/search?q=apple', 'https://www.google.co.kr/search?q=mango',
-            'https://www.google.co.kr/search?q=banana', 'https://www.google.co.kr/search?q=apple'
-            'https://www.google.co.kr/search?q=kiwi', 'https://www.google.co.kr/search?q=dev',
+            'https://www.google.co.kr/search?q=banana', 'https://www.google.co.kr/search?q=numpy',
+            'https://www.google.co.kr/search?q=kiwi', 'https://www.google.co.kr/search?q=apple',
             'https://www.google.co.kr/search?q=python', 'https://www.google.co.kr/search?q=asycnio',
+
             ]
 
     asyncio_scraper(urls=link, verbose=False, test=False)
