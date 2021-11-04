@@ -122,7 +122,7 @@ class BaseReader:
 
                 text = response.text
 
-                print(f'URL: {url}\nTEXT {text[30:60]}')
+                # print(f'URL: {url}\nTEXT {text[30:60]}')
                 return text
 
 

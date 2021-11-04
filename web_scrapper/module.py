@@ -1,4 +1,4 @@
-
+import requests
 from stream.map import *
 import time
 
@@ -28,6 +28,7 @@ def asyncio_scraper(urls=None, verbose=False, test=False):
     a_start = time.time()
 
     stream = BaseStream(reader=BaseReader(session=BaseSession))
+
 
     for l in urls:
 
