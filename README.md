@@ -1,13 +1,14 @@
-# DB Processor & Web scraper (Fast & Stable)
+# DB Processor & Web scraper (Coroutine)
 
-## Based on asyncio Stream, Multi processing
+> Based on asyncio Stream
 
 
 ## feature
-- db connector: `DBConnector` in `db_connector`
-- stream with request module: `Reader, Writer, Stream, Session` in  `stream.map` 
-- fast & stable web scraper: `module` in `web_scrapper`
-- query builder: `dev for sql query builder & http query builder` 
+> - db connector: `DBConnector` in `db_connector`
+> - stream with request module: `Reader, Writer, Stream, Session` in  `stream.map` 
+> - fast & stable web scraper: `module` in `web_scrapper`
+> - query builder: `dev for sql query builder & http query builder`
+ 
 
 -------------
 ## how to use
