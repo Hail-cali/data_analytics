@@ -4,6 +4,7 @@ import asyncio
 import requests
 from queue import PriorityQueue
 import time
+from bs4 import BeautifulSoup
 
 TIMEOUT = 3000
 
@@ -14,16 +15,44 @@ class BaseSession:
         self.request = base
 
     async def __aenter__(self, *args):
-        # print('enter ')
+        print('enter ')
 
-        return self.request.get(self.url)
+        res = self.request.get(self.url)
+
+        return res.text
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        # print('end reader')
+        print('end reader')
+
         pass
 
     def get(self, url):
         return requests.get(url)
+
+
+class CustomSession(BaseSession):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    async def __aenter__(self, *args):
+        print('enter ')
+
+        res = self.request.get(self.url)
+
+        html = res.text
+        header = res.headers
+
+        soup = BeautifulSoup(html, 'html.parser')
+        # print(soup.prettify())
+        print(header)
+
+        return res.text
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        print('end reader')
+
+        pass
 
 class BaseStream:
 
@@ -33,6 +62,10 @@ class BaseStream:
         self._tasks = None
         self.timeout = timeout
         self._schedule = []   # dev modifiy class type list to PrirityQueue
+        print(f"{'-'*10}\nStream Info:\n{self}\n{'-'*10}")
+
+    def __repr__(self):
+        return f"STREAM :: {self.__class__} \nSET :: READER: {self.reader} \nSET :: WRITER: {self.writer}"
 
     @property
     def queue(self):
@@ -78,10 +111,15 @@ class BaseStream:
 
 class BaseReader:
 
-    def __init__(self, session=requests, timeout=TIMEOUT):
+    def __init__(self, base=requests, session=BaseSession, timeout=TIMEOUT):
         self.session = session
         self._urls = None
         self.timeout = timeout
+        self.base_engine = base
+
+    def __repr__(self):
+        return f"{self.__class__} :: BASE SESSION: {self.session} BASE ENGINE: {self.base_engine.__title__}"
+
 
     async def __aenter__(self, *args):
 
@@ -106,24 +144,15 @@ class BaseReader:
         if url is not None:
             self.urls = url
 
-
         if issubclass(self.session, BaseSession):
 
-            async with self.session(requests, url) as response:
+            async with self.session(self.base_engine, url) as response:
 
-                text = response.text
+                result = response
 
-                # print(f'URL: {self.url}\nTEXT {text[30:60]}')
-                return text
+                return result
 
-        else:
 
-            with self.session.get(url) as response:
-
-                text = response.text
-
-                # print(f'URL: {url}\nTEXT {text[30:60]}')
-                return text
 
 
 class BaseWriter:

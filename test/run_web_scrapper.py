@@ -9,6 +9,9 @@ sys.path.append(WORKING_DIR_AND_PYTHON_PATHS)
 from web_scrapper.module import asyncio_scraper
 from web_scrapper.builder import BaseQueryBuilder
 
+import requests
+from stream.map import CustomSession
+
 OPT = ''
 
 def main():
@@ -24,11 +27,16 @@ def main():
             'https://www.google.co.kr/search?q=python', 'https://www.google.co.kr/search?q=asycnio',
             ]
 
+    # query builder for search engine like google, discode, naver
     query_builder = BaseQueryBuilder(engine='goolge')
-    term = query_builder.build('apple')
+    term = query_builder.build('apple -company')
 
     link.append(term)
-    asyncio_scraper(urls=link, verbose=False, test=True)
+
+    # api for web scraper
+    asyncio_scraper(urls=link, base_engine=requests,
+                    base_session=CustomSession,
+                    verbose=False, test=False)
 
 
 if __name__ =='__main__':

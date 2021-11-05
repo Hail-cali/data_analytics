@@ -10,25 +10,25 @@ def check_finished(task):
     else:
         return False
 
-def looger():
+def logger():
 
     pass
 
-def asyncio_scraper(urls=None, verbose=False, test=False):
+def asyncio_scraper(urls=None, base_engine=requests, base_session=BaseSession , verbose=False, test=False):
 
     result = []
     if not urls:
 
         urls = ['https://www.google.co.kr/search?q=apple', 'https://www.google.co.kr/search?q=mango',
-                'https://www.google.co.kr/search?q=banana', 'https://www.google.co.kr/search?q=apple'
-
-                 ]
-
+                'https://www.google.co.kr/search?q=banana', 'https://www.google.co.kr/search?q=apple']
 
     a_start = time.time()
 
-    stream = BaseStream(reader=BaseReader(session=BaseSession))
+    if test:
+        stream = BaseStream(reader=BaseReader(base=requests, session=BaseSession))
 
+    else:
+        stream = BaseStream(reader=BaseReader(base=base_engine, session=base_session))
 
     for l in urls:
 
@@ -43,7 +43,6 @@ def asyncio_scraper(urls=None, verbose=False, test=False):
 
     for task in finished:
         result.append(task.result())
-
 
         if verbose:
             print(task.result())
