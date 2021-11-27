@@ -16,7 +16,7 @@ OPT = ''
 
 def main():
 
-    wrong_link = ['https://www.google.co.kr/search?q=apple', 'https://www.google.co.kr/search?q=mango',
+    wrong_link = ['wrong:link','https://www.google.co.kr/search?q=apple', 'https://www.google.co.kr/search?q=mango',
                  'https://www.google.co.kr/search?q=banana', 'https://www.google.co.kr/search?q=apple',
                 'https://www.google.co.kr/search?q=kiwi', 'https://www.google.co.kr/search?q=dev',
                  'wrong:link']

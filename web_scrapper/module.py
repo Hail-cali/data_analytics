@@ -18,18 +18,19 @@ def asyncio_scraper(urls=None, base_engine=requests, base_session=BaseSession , 
 
     result = []
     if not urls:
-
+        print(f'test url setting check urls type')
         urls = ['https://www.google.co.kr/search?q=apple', 'https://www.google.co.kr/search?q=mango',
                 'https://www.google.co.kr/search?q=banana', 'https://www.google.co.kr/search?q=apple']
 
     a_start = time.time()
 
-    if test:
-        stream = BaseStream(reader=BaseReader(base=requests, session=BaseSession))
+    # if test:
+    #     stream = BaseStream(reader=BaseReader(base=requests, session=BaseSession))
+    #
+    # else:
+    #     stream = BaseStream(reader=BaseReader(base=base_engine, session=base_session))
 
-    else:
-        stream = BaseStream(reader=BaseReader(base=base_engine, session=base_session))
-
+    stream = BaseStream(reader=BaseReader(base=base_engine, session=base_session))
     for l in urls:
 
         stream.scheduler(url=l)
@@ -83,5 +84,8 @@ def asyncio_scraper(urls=None, base_engine=requests, base_session=BaseSession , 
 
 
 if __name__ == '__main__':
-
-    asyncio_scraper(url=None, verbose=False, test=True)
+    import sys
+    print(sys.argv)
+    asyncio_scraper(urls=None, base_engine=requests,
+                    base_session=None,
+                    verbose=False, test=False)

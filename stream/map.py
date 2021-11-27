@@ -112,10 +112,19 @@ class BaseStream:
 class BaseReader:
 
     def __init__(self, base=requests, session=BaseSession, timeout=TIMEOUT):
-        self.session = session
+
+        if base is None:
+            self.base_engine = requests
+        else:
+            self.base_engine = base
+
+        if session is None:
+            self.session = BaseSession
+        else:
+            self.session = session
+
         self._urls = None
         self.timeout = timeout
-        self.base_engine = base
 
     def __repr__(self):
         return f"{self.__class__} :: BASE SESSION: {self.session} BASE ENGINE: {self.base_engine.__title__}"
