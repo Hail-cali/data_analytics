@@ -12,7 +12,9 @@ from web_scrapper.builder import BaseQueryBuilder
 import requests
 from stream.map import CustomSession
 
-OPT = ''
+from opt import parse_opt
+import util.logger, util.loader
+OPT = parse_opt()
 
 def main():
 
@@ -27,17 +29,22 @@ def main():
             'https://www.google.co.kr/search?q=python', 'https://www.google.co.kr/search?q=asycnio',
             ]
 
+    if OPT.tasks:
+        file = util.loader.load_csv(OPT.tasks)
+        link = [link[0] for link in file]
+        print(link)
     # query builder for search engine like google, discode, naver
-    query_builder = BaseQueryBuilder(engine='goolge')
-    term = query_builder.build('apple -company')
-
-    link.append(term)
+    # query_builder = BaseQueryBuilder(engine='goolge')
+    # term = query_builder.build('apple -company')
+    #
+    # link.append(term)
 
     # api for web scraper
-    asyncio_scraper(urls=link, base_engine=requests,
+    result = asyncio_scraper(urls=link, base_engine=requests,
                     base_session=CustomSession,
                     verbose=False, test=False)
 
+    util.logger.save_result(OPT, *result)
 
 if __name__ =='__main__':
     main()
