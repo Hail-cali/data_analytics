@@ -1,29 +1,60 @@
-# DB Processor & Web scraper (Coroutine)
+# Coroutines Web Scrapper & DB Processor
+> What is Coroutines ?  
+> 
+### `Based on asyncio Stream`  
 
-> Based on asyncio Stream
 
-
-## feature
-> - db connector: `DBConnector` in `db_connector`
-> - stream with request module: `Reader, Writer, Stream, Session` in  `stream.map` 
-> - fast & stable web scraper: `module` in `web_scrapper`
+## Feature
+> - coroutines web scraper: `run_web_scrapper.py` in `test`
+> - coroutines selenium scrapper : `run_selnium.py` in `test`
+> - db processor: `DBConnector` in `db_connector`
 > - query builder: `dev for sql query builder & http query builder`
  
 
 -------------
-## how to use
+## How to use
+
+
+### Web Scraper (crawling)
+- **run code inside `test` dir**
+- when use tasks.csv
+```shell
+python run_web_scrapper.py --tasks path/to/tasks.csv --save_file crawling  \
+                            --result_path result --result_type text
+```
+- when edit url list inside code, skip tasks option
+```shell
+python run_web_scrapper.py  --save_file crawling  \
+                            --result_path result --result_type text
+```
+
+- sample run sh
+```angular2html
+python run_web_scrapper.py --tasks ../tasks.csv --save_file crawling  \
+                            --result_path result --result_type text
+```
+
+
+### Selenium Scrapper
+
+```shell
+python run_selenium.py 
+```
+
+
 ### DB processor
 - shell 'dev'
 ```shell
 python run.py
 ```
 
-### web scraper
-- shell
-```shell
-python run_web_scrapper.py -l https://google.com https://google.com 
-```
-or simply edit in run file (add url list)
-```shell
-python run_web_scrapper.py  
-```
+## Modules
+> - stream with request module: `Reader, Writer, Stream, Session` in  `stream.map`
+
+-----
+
+## Task lists
+- [ ] selenium scrapper 
+- [x] db processor code
+- [x] web scrapper code
+- [ ] Dev crawler using API 
