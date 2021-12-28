@@ -67,3 +67,13 @@ class DBConnector(BaseConnector):
         result = pd.DataFrame(result)
         return result
 
+    async def run_async(self, *args):
+
+        print('here')
+
+
+async def wrapper_db():
+
+
+
+    return

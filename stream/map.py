@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 TIMEOUT = 3000
 
+
 class BaseSession:
 
     def __init__(self, base=requests, url=None, *args):
@@ -45,14 +46,36 @@ class CustomSession(BaseSession):
 
         soup = BeautifulSoup(html, 'html.parser')
         # print(soup.prettify())
-        print(header)
+        # print(header)
 
-        return res.text
+        return header
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         print('end reader')
 
         pass
+
+
+class AutoSession(BaseSession):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    async def __aenter__(self, *args):
+        print('enter ')
+
+        self.request.get(self.url)
+
+        self.request.find_element_by_xpath()
+
+
+
+        return
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        print('end reader')
+        self.request.close()
+
 
 class BaseStream:
 
@@ -75,12 +98,10 @@ class BaseStream:
     def tasks(self):
         return self._tasks
 
-
     @tasks.setter
     def tasks(self, cls):
 
         self._tasks = cls
-
 
     def scheduler(self, url=None):
 
@@ -106,7 +127,6 @@ class BaseStream:
 
         else:
             return False
-
 
 
 class BaseReader:
