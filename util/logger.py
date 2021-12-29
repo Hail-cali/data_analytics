@@ -22,11 +22,11 @@ def save_result(opt, *args, **kwargs):
             writer = csv.writer(f)
             if isinstance(data, dict):
                 for line in data:
-                    print(data[line])
+
                     writer.writerow(data[line])
             else:
                 for line in data:
-                    print(line)
+
                     writer.writerow([line])
 
 

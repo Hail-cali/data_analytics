@@ -58,11 +58,14 @@ class CustomSession(BaseSession):
 
 class AutoSession(BaseSession):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, driver_path=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.chrome_path = driver_path
 
     async def __aenter__(self, *args):
         print('enter ')
+
+        drivers = self.request.Chrome(self.chrome_path)
 
         self.request.get(self.url)
 
@@ -70,7 +73,7 @@ class AutoSession(BaseSession):
 
 
 
-        return
+        return 'sample'
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         print('end reader')
@@ -181,6 +184,21 @@ class BaseReader:
 
                 return result
 
+
+class AutoReader(BaseReader):
+
+    def __init__(self, chrome=None, *args, **kwargs):
+        super(AutoReader, self).__init__()
+        self.chrome = chrome
+
+    async def request(self, url=None):
+
+
+        if issubclass(self.session, AutoSession):
+            async with self.session(self.chrome, self.base_engine, url) as response:
+                result = response
+
+                return result
 
 
 

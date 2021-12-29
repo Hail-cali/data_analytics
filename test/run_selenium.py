@@ -8,22 +8,20 @@ sys.path.append(WORKING_DIR_AND_PYTHON_PATHS)
 
 from web_scrapper.module import asyncio_scraper
 from web_scrapper.builder import BaseQueryBuilder
-
-import requests
-from stream.map import AutoSession
-
+from stream.map import AutoSession, AutoReader
 
 from selenium import webdriver
 
+from opt import parse_opt
+import util.logger, util.loader
 
-OPT = ''
+OPT = parse_opt()
+
 
 def main():
 
+    link = ['https://www.google.co.kr/search?q=apple'
 
-
-    link = ['https://www.google.co.kr/search?q=apple', 'https://www.google.co.kr/search?q=mango',
-            'https://www.google.co.kr/search?q=banana', 'https://www.google.co.kr/search?q=numpy',
             ]
 
     # query builder for search engine like google, discode, naver
@@ -31,13 +29,12 @@ def main():
     # term = query_builder.build('apple -company')
     # link.append(term)
 
-    chrome_path = '/Users/george/PycharmProjects/TextMining_study/selenium_server/chromedriver_linux64_83'
-    drivers = webdriver.Chrome(chrome_path)
     # api for web scraper
-    asyncio_scraper(urls=link, base_engine=drivers,
-                    base_session=AutoSession,
+    result = asyncio_scraper(urls=link, base_engine=webdriver, base_reader=AutoReader,
+                    base_session=AutoSession, chrome=OPT.selenium_driver,
                     verbose=False, test=False)
 
+    util.logger.save_result(OPT, *result)
 
 if __name__ =='__main__':
     main()
