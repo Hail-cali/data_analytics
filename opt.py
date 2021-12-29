@@ -15,13 +15,15 @@ def parse_opt():
                         default='result', help='result path in root dir')
 
     parser.add_argument('--save_file', type=str,
-                        default='selenium', help=' tasks name')
+                        default='test', help=' tasks name')
 
     parser.add_argument('--result_type', type=str,
                         default='text', help='result type | text img sound |')
 
     parser.add_argument('--tasks', type=str,
                         help='tasks csv file path')
+
+    parser.add_argument('--selenium_driver',type=str)
 
     args = parser.parse_args()
 

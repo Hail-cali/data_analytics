@@ -14,7 +14,8 @@ def logger():
 
     pass
 
-def asyncio_scraper(urls=None, base_engine=requests, base_session=BaseSession , verbose=False, test=False):
+def asyncio_scraper(urls=None, base_engine=requests, base_session=BaseSession , base_reader=BaseReader,
+                    verbose=False, chrome=None, test=False):
 
     result = []
     if not urls:
@@ -30,7 +31,14 @@ def asyncio_scraper(urls=None, base_engine=requests, base_session=BaseSession , 
     # else:
     #     stream = BaseStream(reader=BaseReader(base=base_engine, session=base_session))
 
-    stream = BaseStream(reader=BaseReader(base=base_engine, session=base_session))
+    if issubclass(base_reader, AutoReader):
+        stream = BaseStream(reader=base_reader(chrome=chrome, base=base_engine, session=base_session))
+
+    else:
+        stream = BaseStream(reader=base_reader(base=base_engine, session=base_session))
+
+
+
     for l in urls:
 
         stream.scheduler(url=l)
